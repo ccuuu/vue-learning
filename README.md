@@ -15,11 +15,17 @@
 ---
 ### 文件结构分析
 src目录：
+
 **compiler：** 编译相关模块，也就是template模板转换为render函数的地方；
+
 **core：** 核心模块，vue的初始化、整个生命周期都在这里实现；
+
 **platforms：** 平台化模块，分为web和weex，而我们只需要关注web即可；
+
 **server：** 服务端渲染模块，我们可以无需关注；
+
 **sfc：** 对单文件组件的处理模块。同样，无需关注；
+
 **shared：** 一些公用的工具方法。
 
 总结来说，在上述的文件中，我们需要重点关注的只有：compiler、core、platforms、shared。
