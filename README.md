@@ -30,7 +30,7 @@
 
 
 
-> #### compiler文件
+ #### compiler文件
 
 整个compiler的核心作用就是生成render函数。而在该模块中的重点逻辑为 HTMLParser、parse、optimization、generate。在该文件中，会存在大量的高阶函数，在阅读该模块代码的时候也是以充分学习到函数式编程的思想。以下是对几个核心文件的简单介绍：
 
@@ -47,7 +47,7 @@
 **to-function：** 将codengen生成的render函数字符串用new Function的方式最终生成render函数。
 
 
-> #### core文件
+ #### core文件
 
 core模块为整个vue的核心模块，其中几乎包含了vue的所有核心内容。如vue实例化的选项合并，data、computed等属性的初始化，Watcher、Observer的实现、vue实例的挂载等等。内容很多，因此我们需要重点分析该模块：
 
@@ -64,7 +64,7 @@ core模块为整个vue的核心模块，其中几乎包含了vue的所有核心�
 **vdom：** 也就是虚拟DOM（vonde）相关内容模块。包括普通节点vnode、component vnode、functional component等的初始化、patch函数等等。
 
 
-> #### paltforms文件和shared文件
+ #### paltforms文件和shared文件
 
 paltforms文件的逻辑不多，也不复杂。其中最主要的就是改写mount函数、合并一些初始化选项、做一些差异化的处理，如属性和指令等。大家可以只关注web相关的内容即可。
 
