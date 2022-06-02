@@ -109,6 +109,15 @@ export function nextTick(cb?: Function, ctx?: Object) {
 
   //注意：callbacks不仅仅有用户自身注册的$nextTick callback，还有的就是queueWatcher
   //的flushScheduleQueue
+
+  //这里其实有优化空间：
+  //代理函数在每一次调用之后都会被销毁，因此每一个函数对象都是一个只使用一次的“一次性对象”
+  //比如在vue中使用了10次 this.$nextTick，就会产生十个额外的垃圾对象。
+
+  //优化的方案可以使用 “缓存代理模式”。也就是将每一个代理函数都保存起来，留给下一次使用。
+  //参考这个开源库：
+  //https://github.com/kriskowal/asap
+  //项目很小也不复杂，但是技术水平很高，推荐给大家
   let _resolve;
   callbacks.push(() => {
     if (cb) {
