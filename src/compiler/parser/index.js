@@ -1185,6 +1185,13 @@ function processAttrs(el) {
         addHandler(el, name, value, modifiers, false, warn, list[i], isDynamic);
       } else {
         //如果符合dirRE条件的属性名不为bind和on，可能为自定义指令，也可能为v-model, v-text等
+
+        //当然也可能为v-on和v-bind。对于这种情况出现的场景如下：
+        // v-bind = "{name:fantasy,age:21}"   v-on = "{write:write,read:read}"
+        //或者v-bind="$attrs" 和 v-on="$listeners"
+        //也就是说 v-bind|v-on 和 v-bind:some=""| v-on:some=""的处理逻辑是不同的
+        //后者会当作directives处理
+
         // normal directives
         name = name.replace(dirRE, "");
         // parse arg
