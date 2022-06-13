@@ -365,6 +365,12 @@ export function updateChildComponent(
   //因此，为了解决这种情况，会通过子组件在父组件的组件节点的propData属性来刷新
   //子组件选项中的_props。这样也就实现了对子组件的更新
 
+  //大家可以思考这样一个问题：若父组件给子组件传递的值没有发生变化，但是在这里不做
+  //区分都统一重新赋值了，是不是代表子组件会做无意义的update？
+
+  //其实不会。因为在每一个响应式数据定义set的时候就做了这种处理：如果oldVal === val
+  //则不会做notify，也就不会通知到Watcher。
+
   if (propsData && vm.$options.props) {
     toggleObserving(false);
     const props = vm._props;
