@@ -254,6 +254,25 @@ function genDefaultModel(
   if (trim || number) {
     //如果声明了trim或number修饰符，会在输入框失焦的时候触发强制更新，使输入框中的
     //内容与实际绑定的value同步
+
+    //详解：
+    //正常情况下，页面上的input框若输入了内容，则会通过上述添加的input事件或change事件
+    //改变绑定的data的值。
+
+    //但是如果是使用了trim，就会有一下情况产生（以顺序输入 'a', 'c', 'd', ' ', ' '为例）：
+    //1，input框输入 a，通过input事件改变data为 a；
+    //2，input框输入 c，通过input事件改变data为 ac；
+    //3，input框输入 d，通过input事件改变data为 acd；
+    //上述三步都会通过响应式原理通知页面update。虽然我也觉得不合理，但事实就是 通过页面改变data最终还是会导致data的响应式去通知Watcher。虽然结果上通过对比发现内容相同，不导致更新，但是逻辑上来看依旧不合理
+    //接下来是关键的两步。也就是为什么需要通过blur添加$forceUpdate的原因
+
+    //4，input框输入 ' '，但是value.trim()依旧为acd，因此响应式失效。此时value为'acd '，而data为'abc'；
+    //5，input框输入 ' '，但是value.trim()依旧为acd，因此响应式失效。此时value为'acd  '，而data为'abc'；
+    //最终，在输入两次空格之后，结果是 input的value改变为'acb  '，而data为'acb'
+    //并且此时是无法通过响应式去刷新页面的，因为并未触发。从而现象就是 data与其对应的value不相同
+
+    //此时，添加一个blur事件，就可以最终在输入完成之后，通过强制的刷新，将value再次改变为与data相同的'acb'
+
     addHandler(el, "blur", "$forceUpdate()");
   }
 }
